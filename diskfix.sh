@@ -2,8 +2,6 @@
 
 stty -echoctl
 pid=$(ps -ef | grep  -m 1 diskfix.sh | grep -v grep | awk '{print $2}')
-#pid=$(ps -ef | grep -v grep | grep 'diskfix.sh' | awk '{print $2}')
-# pid is for some reason two values, gonna work on that line above
 
 PreTrap() {
 QUIT=1
