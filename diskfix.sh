@@ -1,6 +1,7 @@
 #!/bin/bash
 
 stty -echoctl
+set -e
 pid=$(ps -ef | grep  -m 1 diskfix.sh | grep -v grep | awk '{print $2}')
 
 PreTrap() {
@@ -13,7 +14,6 @@ CleanUp
 
 CleanUp() {
 	echo
-	echo "cleanup requested"
 	echo
 	if [[ $QUIT == 1 ]]
 	then
@@ -24,8 +24,16 @@ CleanUp() {
 	exit 0
 }
 
-trap PreTrap SIGINT SIGTERM SIGSTP INT
+Error() {
+    echo "Exit nonzero caught"
+    echo $?
+    echo
+    CleanUp
+}
+
+trap PreTrap SIGINT SIGTERM
 trap CleanUp EXIT
+
 clear
 echo '__________________________'
 echo "|		          |"
@@ -100,6 +108,10 @@ then
     pvcreate /dev/sd$DRIVE
     echo "running vgextend vg0 /dev/sd$DRIVE"
     vgextend vg0 /dev/sd$DRIVE
+    if [ $? -gt 0 ]
+    then
+	    Error
+    fi
 fi
 
 echo
