@@ -95,8 +95,15 @@ fi
 
 unset REPLY
 echo
-echo "running pvcreate /dev/sd$DRIVE"
-echo "running vgextend vg0 /dev/sd$DRIVE"
+
+if [[ QUIT != 1 ]]
+then
+    echo "running pvcreate /dev/sd$DRIVE"
+    pvcreate /dev/sd$DRIVE
+    echo "running vgextend vg0 /dev/sd$DRIVE"
+    vgextend vg0 /dev/sd$DRIVE
+fi
+
 echo
 echo '__________________________'
 echo "|		          |"
